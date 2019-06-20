@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>正在跳转...</title>
+</head>
+<body>
+登录成功，正在跳转...<br>
+
+<!--此处跳转可用来判断登录的角色-->
+
+<script type="text/javascript">
+    var i = 1;
+    var timer = setInterval(function () {
+        i--;
+        if (i == 0) {
+            window.location.href = "/mainpage";
+        }
+    }, 1000);
+</script>
+</body>
+</html>

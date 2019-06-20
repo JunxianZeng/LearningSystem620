@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>注册成功</title>
+</head>
+<body>
+注册成功(<label id="second">6</label>秒后自动跳转至登录界面......)<br>
+<script type="text/javascript">
+    var second = document.getElementById("second");
+    var i = 6;
+    var timer = setInterval(function () {
+        i--;
+        second.innerHTML = i;
+        if (i == 0) {
+            window.location.href = "/login.html";
+        }
+    }, 1000);
+</script>
+<a href="/login.html;">返回</a>
+</body>
+</html>

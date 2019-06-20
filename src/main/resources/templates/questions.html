@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>题目列表</title>
+    <link href="../static/css/loader.css" rel="stylesheet">
+    <script>// IE 10 and earlier
+    if (window.navigator.userAgent.indexOf('MSIE ') > 0 &&
+        window.confirm('Your browser is not supported, click \'OK\' to update')) {
+        window.location = 'http://outdatedbrowser.com'
+    }</script>
+    <link href="../static/css/vendor.css" rel="stylesheet">
+    <link href="../static/css/oj.css" rel="stylesheet">
+    <script async="" src="../static/js/analytics.js" charset="utf8"></script>
+
+
+    <!-- Le styles -->
+    <link href="//cdn.staticfile.org/twitter-bootstrap/3.0.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="v3/layoutit.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="//apps.bdimg.com/libs/html5shiv/3.7/html5shiv.min.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="v3/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="v3/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="v3/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="v3/apple-touch-icon-57-precomposed.png">
+
+    <script type="text/javascript" src="//cdn.staticfile.org/jquery/2.0.0/jquery.min.js"></script>
+    <script type="text/javascript" src="//cdn.staticfile.org/jqueryui/1.10.2/jquery-ui.min.js"></script>
+    <script type="text/javascript"
+            src="//cdn.staticfile.org/jqueryui-touch-punch/0.2.2/jquery.ui.touch-punch.min.js"></script>
+    <script type="text/javascript" src="//cdn.staticfile.org/twitter-bootstrap/3.0.1/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="v3/jquery.htmlClean.js"></script>
+    <script type="text/javascript" src="v3/scripts.min.js"></script>
+
+
+</head>
+<body>
+
+<nav class="navbar navbar-default navbar-inverse" role="navigation">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span
+                class="icon-bar"></span><span class="icon-bar"></span></button>
+        <a class="navbar-brand" href="#">USSTKY</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+            <li><a href="/mainpage">主页</a></li>
+            <li><a href="/questions">题库</a></li>
+            <li><a href="/courses">课程</a></li>
+            <li class="更多">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">更多<strong class="caret"></strong></a>
+                <ul class="dropdown-menu">
+                    <li><a href="/feedbacks">我要反馈</a></li>
+                    <li class="divider"></li>
+                    <li><a href="/aboutus">关于我们</a></li>
+                </ul>
+            </li>
+        </ul>
+        <form class="navbar-form navbar-left" role="search">
+            <div class="form-group">
+                <input class="form-control" type="text" placeholder="站内查询"/>
+            </div>
+            <button type="submit" class="btn btn-default">查询</button>
+        </form>
+        <ul class="nav navbar-nav" style="position: absolute;right: 0px">
+            <!--             用户名，不需要链接地址-->
+            <li><a th:if="${session.loginRole=='Teacher'}" th:text="${session.teacher.getName()}"></a></li>
+            <li><a th:if="${session.loginRole=='Manager'}" th:text="${session.manager.getName()}"></a></li>
+            <li><a th:if="${session.loginRole=='Student'}" th:text="${session.student.getName()}">李华</a></li>
+            <!--             点击链接可注销-->
+            <li><a href="#">注销</a></li>
+        </ul>
+    </div>
+</nav>
+
+
+<div class="content-app">
+    <div class="ivu-row-flex" style="margin-left: -9px; margin-right: -9px;">
+        <div class="ivu-col ivu-col-span-19" style="padding-left: 9px; padding-right: 9px;">
+            <div class="ivu-card ivu-card-dis-hover ivu-card-shadow">
+                <div class="ivu-card-head">
+                    <div class="panel-title">
+                        <div>Problem List</div>
+                    </div>
+                </div>
+                <div class="ivu-card-extra">
+                    <div class="panel-extra">
+                        <div>
+                            <ul class="filter">
+                                <li>
+                                    <div class="ivu-dropdown">
+                                        <div class="ivu-dropdown-rel"><span>Difficulty
+              <i class="ivu-icon ivu-icon-arrow-down-b"></i></span></div>
+                                        <div class="ivu-select-dropdown" style="display: none;">
+                                            <ul class="ivu-dropdown-menu">
+                                                <li class="ivu-dropdown-item">All</li>
+                                                <li class="ivu-dropdown-item">Low</li>
+                                                <li class="ivu-dropdown-item">Mid</li>
+                                                <li class="ivu-dropdown-item">High</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li><span tabindex="0"
+                                          class="ivu-switch ivu-switch-large"><input value="false"
+                                                                                     type="hidden"> <span
+                                        class="ivu-switch-inner"> <span
+                                >Tags</span></span></span></li>
+                                <li>
+                                    <div class="ivu-input-wrapper ivu-input-type"><i
+                                            class="ivu-icon ivu-icon-ios-search-strong ivu-input-icon ivu-input-icon-normal"></i>
+                                        <input autocomplete="off" spellcheck="false" placeholder="keyword"
+                                               class="form-control" style="width: 200px" type="text"></div>
+                                </li>
+                                <li>
+                                    <button type="button" class="btn btn-primary">
+                                         <span><i class="ivu-icon ivu-icon-refresh"></i>
+            Reset
+          </span></button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="ivu-card-body" style="padding: 0px;">
+                    <div class="panel-body">
+                        <div class="ivu-table-wrapper" style="width: 100%; font-size: 16px;">
+                            <div class="ivu-table">
+                                <div class="ivu-table-header">
+                                    <table class="table table-striped" style="width: 1259px;" cellspacing="0"
+                                           cellpadding="0" border="0">
+                                        <colgroup>
+                                            <col width="80">
+                                            <col width="294">
+                                            <col width="294">
+                                            <col width="295">
+                                            <col width="295">
+                                        </colgroup>
+                                        <thead>
+                                        <tr>
+                                            <th class="">
+                                                <div class="ivu-table-cell"><span class="">#</span>
+                                                </div>
+                                            </th>
+                                            <th class="">
+                                                <div class="ivu-table-cell"><span class="">Title</span>
+                                                </div>
+                                            </th>
+                                            <th class="">
+                                                <div class="ivu-table-cell"><span class="">Level</span>
+                                                </div>
+                                            </th>
+                                            <th class="">
+                                                <div class="ivu-table-cell"><span class="">Total</span>
+                                                </div>
+                                            </th>
+                                            <th class="">
+                                                <div class="ivu-table-cell"><span class="">AC Rate</span>
+                                                </div>
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                                <div class="ivu-table-body" style="">
+                                    <table class="table table-striped" style="width: 1259px;" cellspacing="0"
+                                           cellpadding="0" border="0">
+                                        <colgroup>
+                                            <col width="80">
+                                            <col width="294">
+                                            <col width="294">
+                                            <col width="295">
+                                            <col width="295">
+                                        </colgroup>
+                                        <tbody class="ivu-table-tbody">
+                                        <tr class="ivu-table-row">
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <button type="button" class="btn btn-default"><span>1001</span>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <button type="button" class="btn btn-default">
+                                                        <span>A+B Easy Problem</span>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <div class="ivu-tag ivu-tag-green ivu-tag-checked"> <span
+                                                            class="ivu-tag-text ivu-tag-color-white">Low</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell"><span>347</span>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <span>19.88%</span></div>
+                                            </td>
+                                        </tr>
+                                        <tr class="ivu-table-row">
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <button type="button" class="btn btn-default"
+                                                    ><span>1002</span>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <button type="button" class="btn btn-default"
+                                                    ><span>Sorahjy and Sequence</span>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <div class="ivu-tag ivu-tag-green ivu-tag-checked"> <span
+                                                            class="ivu-tag-text ivu-tag-color-white">Low</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell"><span>205</span>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <span>9.27%</span></div>
+                                            </td>
+                                        </tr>
+                                        <tr class="ivu-table-row">
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <button type="button" class="btn btn-default"
+                                                    ><span>1003</span>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <button type="button" class="btn btn-default"
+                                                    >
+                                                        <span>ISBN Number</span></button>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <div class="ivu-tag ivu-tag-green ivu-tag-checked"> <span
+                                                            class="ivu-tag-text ivu-tag-color-white">Low</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell"><span>60</span>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <span>66.67%</span></div>
+                                            </td>
+                                        </tr>
+                                        <tr class="ivu-table-row">
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <button type="button" class="btn btn-default"
+                                                    ><span>1024</span>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <button type="button" class="btn btn-default"
+                                                    ><span>Uniform Generator</span>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <div class="ivu-tag ivu-tag-green ivu-tag-checked"> <span
+                                                            class="ivu-tag-text ivu-tag-color-white">Low</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell"><span>63</span>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <span>46.03%</span></div>
+                                            </td>
+                                        </tr>
+                                        <tr class="ivu-table-row">
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <button type="button" class="btn btn-default"
+                                                    ><span>1026</span>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <button type="button" class="btn btn-default"
+                                                    >
+                                                        <span>Fish Sound</span></button>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <div class="ivu-tag ivu-tag-yellow ivu-tag-checked"> <span
+                                                            class="ivu-tag-text ivu-tag-color-white">High</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell"><span>72</span>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <span>41.67%</span></div>
+                                            </td>
+                                        </tr>
+                                        <tr class="ivu-table-row">
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <button type="button" class="btn btn-default"
+                                                    ><span>1028</span>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <button type="button" class="btn btn-default"
+                                                    >
+                                                        <span>Smoking Time</span></button>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <div class="ivu-tag ivu-tag-green ivu-tag-checked"> <span
+                                                            class="ivu-tag-text ivu-tag-color-white">Low</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell"><span>75</span>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <span>45.33%</span></div>
+                                            </td>
+                                        </tr>
+                                        <tr class="ivu-table-row">
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <button type="button" class="btn btn-default"
+                                                    ><span>1027</span>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <button type="button" class="btn btn-default"
+                                                    ><span>The Troublesome Frog</span>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <div class="ivu-tag ivu-tag-blue ivu-tag-checked"> <span
+                                                            class="ivu-tag-text ivu-tag-color-white">Mid</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell"><span>21</span>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <span>47.62%</span></div>
+                                            </td>
+                                        </tr>
+                                        <tr class="ivu-table-row">
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <button type="button" class="btn btn-default"
+                                                    ><span>1025</span>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <button type="button" class="btn btn-default"
+                                                    >
+                                                        <span>USSTSIW Band</span></button>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <div class="ivu-tag ivu-tag-blue ivu-tag-checked"> <span
+                                                            class="ivu-tag-text ivu-tag-color-white">Mid</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell"><span>114</span>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <span>21.93%</span></div>
+                                            </td>
+                                        </tr>
+                                        <tr class="ivu-table-row">
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <button type="button" class="btn btn-default"
+                                                    ><span>1023</span>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <button type="button" class="btn btn-default"
+                                                    ><span>Serpentine Matrix</span>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <div class="ivu-tag ivu-tag-green ivu-tag-checked"> <span
+                                                            class="ivu-tag-text ivu-tag-color-white">Low</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell"><span>80</span>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <span>31.25%</span></div>
+                                            </td>
+                                        </tr>
+                                        <tr class="ivu-table-row">
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <button type="button" class="btn btn-default"
+                                                    ><span>1022</span>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <button type="button" class="btn btn-default"
+                                                    >
+                                                        <span>Circle</span></button>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <div class="ivu-tag ivu-tag-green ivu-tag-checked"> <span
+                                                            class="ivu-tag-text ivu-tag-color-white">Low</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell"><span>58</span>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <span>50.00%</span></div>
+                                            </td>
+                                        </tr>
+                                        <tr class="ivu-table-row">
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <button type="button" class="btn btn-default"
+                                                    ><span>1021</span>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <button type="button" class="btn btn-default"
+                                                    >
+                                                        <span>Travelling</span></button>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <div class="ivu-tag ivu-tag-blue ivu-tag-checked"> <span
+                                                            class="ivu-tag-text ivu-tag-color-white">Mid</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell"><span>65</span>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <span>27.69%</span></div>
+                                            </td>
+                                        </tr>
+                                        <tr class="ivu-table-row">
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <button type="button" class="btn btn-default"
+                                                    ><span>1020</span>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <button type="button" class="btn btn-default"
+                                                    ><span>Prime number ring</span>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <div class="ivu-tag ivu-tag-blue ivu-tag-checked"> <span
+                                                            class="ivu-tag-text ivu-tag-color-white">Mid</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell"><span>63</span>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <span>46.03%</span></div>
+                                            </td>
+                                        </tr>
+                                        <tr class="ivu-table-row">
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <button type="button" class="btn btn-default"
+                                                    ><span>1019</span>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <button type="button" class="btn btn-default"
+                                                    >
+                                                        <span>Easy Words</span></button>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <div class="ivu-tag ivu-tag-green ivu-tag-checked"> <span
+                                                            class="ivu-tag-text ivu-tag-color-white">Low</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell"><span>106</span>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <span>32.08%</span></div>
+                                            </td>
+                                        </tr>
+                                        <tr class="ivu-table-row">
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <button type="button" class="btn btn-default"
+                                                    ><span>1004</span>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <button type="button" class="btn btn-default"
+                                                    ><span>Permutation of parentheses</span>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <div class="ivu-tag ivu-tag-green ivu-tag-checked"> <span
+                                                            class="ivu-tag-text ivu-tag-color-white">Low</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell"><span>69</span>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <span>47.83%</span></div>
+                                            </td>
+                                        </tr>
+                                        <tr class="ivu-table-row">
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <button type="button" class="btn btn-default"
+                                                    ><span>1005</span>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <button type="button" class="btn btn-default"
+                                                    ><span>Red and Black</span>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <div class="ivu-tag ivu-tag-green ivu-tag-checked"> <span
+                                                            class="ivu-tag-text ivu-tag-color-white">Low</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell"><span>126</span>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <span>32.54%</span></div>
+                                            </td>
+                                        </tr>
+                                        <tr class="ivu-table-row">
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <button type="button" class="btn btn-default"
+                                                    ><span>1006</span>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <button type="button" class="btn btn-default"
+                                                    >
+                                                        <span>Max Squares</span></button>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <div class="ivu-tag ivu-tag-green ivu-tag-checked"> <span
+                                                            class="ivu-tag-text ivu-tag-color-white">Low</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell"><span>59</span>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <span>38.98%</span></div>
+                                            </td>
+                                        </tr>
+                                        <tr class="ivu-table-row">
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <button type="button" class="btn btn-default"
+                                                    ><span>1007</span>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <button type="button" class="btn btn-default"
+                                                    ><span>Sorahjy and more Saltedfish</span>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <div class="ivu-tag ivu-tag-green ivu-tag-checked"> <span
+                                                            class="ivu-tag-text ivu-tag-color-white">Low</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell"><span>44</span>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <span>38.64%</span></div>
+                                            </td>
+                                        </tr>
+                                        <tr class="ivu-table-row">
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <button type="button" class="btn btn-default"
+                                                    ><span>1008</span>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <button type="button" class="btn btn-default"
+                                                    ><span>Sorahjy and Saltedfish</span>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <div class="ivu-tag ivu-tag-green ivu-tag-checked"> <span
+                                                            class="ivu-tag-text ivu-tag-color-white">Low</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell"><span>23</span>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <span>78.26%</span></div>
+                                            </td>
+                                        </tr>
+                                        <tr class="ivu-table-row">
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <button type="button" class="btn btn-default"
+                                                    ><span>1009</span>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <button type="button" class="btn btn-default"
+                                                    ><span>Sorahjy and String</span>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <div class="ivu-tag ivu-tag-green ivu-tag-checked"> <span
+                                                            class="ivu-tag-text ivu-tag-color-white">Low</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell"><span>50</span>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <span>32.00%</span></div>
+                                            </td>
+                                        </tr>
+                                        <tr class="ivu-table-row">
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <button type="button" class="btn btn-default"
+                                                    ><span>1010</span>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <button type="button" class="btn btn-default"
+                                                    ><span>Sorahjy and Chocolate</span>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <div class="ivu-tag ivu-tag-green ivu-tag-checked"> <span
+                                                            class="ivu-tag-text ivu-tag-color-white">Low</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell"><span>33</span>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="ivu-table-cell">
+                                                    <span>60.61%</span></div>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="ivu-table-tip" style="display: none;">
+                                    <table cellspacing="0" cellpadding="0" border="0">
+                                        <tbody>
+                                        <tr>
+                                            <td style="width: 1260px;"><span>No filter data</span></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <object style="display: block; position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; border: medium none; padding: 0px; margin: 0px; opacity: 0; z-index: -1000; pointer-events: none;"
+                                    tabindex="-1" type="text/html" data="../static/js/a"></object>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div data-v-06033e7c="" class="page">
+                <ul data-v-06033e7c="" class="ivu-page">
+                    <li title="Previous Page" class="ivu-page-prev ivu-page-disabled"><a><i
+                            class="ivu-icon ivu-icon-ios-arrow-left"></i></a></li>
+                    <li title="1" class="ivu-page-item ivu-page-item-active"><a>1</a></li>
+
+                    <li title="2" class="ivu-page-item"><a>2</a></li>
+                    <li title="3" class="ivu-page-item"><a>3</a></li>
+                    <li title="Next 5 Pages" class="ivu-page-item-jump-next"><a><i
+                            class="ivu-icon ivu-icon-ios-arrow-right"></i></a></li>
+                    <li title="15" class="ivu-page-item"><a>15</a></li>
+                    <li title="Next Page" class="ivu-page-next"><a><i class="ivu-icon ivu-icon-ios-arrow-right"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="ivu-col ivu-col-span-5" style="padding-left: 9px; padding-right: 9px;">
+            <div class="ivu-card ivu-card-bordered">
+                <div class="ivu-card-head">
+                    <div class="panel-title">
+                        <div class="taglist-title">Tags</div>
+                    </div>
+                </div>
+                <div class="ivu-card-extra">
+                    <div class="panel-extra"></div>
+                </div>
+                <div class="ivu-card-body" style="padding: 10px;">
+                    <div class="panel-body">
+                        <button type="button" class="btn btn-default">
+                              <span>真题练习
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>usstsiw-29
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>模拟
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>热身赛
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>tx
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>map
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>USSTSIW-45
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>Floyd
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>最小公倍数
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>DFS
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>dp
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>高精度
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>签到题
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>gcd
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>二分
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>温暖
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>USSTSIW-40
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>递推
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>DP
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>高阶
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>并查集
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>热身赛45
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>概率论
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>简单字符串
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>USSTSIW-43
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>水题
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>素数判别法
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>组合数
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>USSTSIW-44
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>热身赛46
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>容斥
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>递归
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>基础数学
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>Dijsktra
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>背包
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>几何
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>天梯赛基础题
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>规律题
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>none
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>数论
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>暴力搜索
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>思维
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>HDU
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>算法竞赛课程上机课-3
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>简单数学
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>期末考试
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>嵌套循环
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>乱搞题
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>简单数论
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>USSTSIW-42
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>so easy
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>sort
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>第二届天梯赛校内选拔赛
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>简单
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>hard
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>字符串处理
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>简单矩阵
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>USSTSIW-41
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>Math
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>简单思维
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>easy
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>送命
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>最小生成树
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>子序和
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>括号序列
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>Tricky
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>字符串
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>USSTSIW-46
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>签到
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>循环
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>二叉树遍历
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>Catlan
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>dfs
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>排序
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>打表
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>USSTSIW-29
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>公倍数问题
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>愚人节
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>热身赛39
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>WF
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>分支结构
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>单调队列
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>简单字符串处理
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>数学
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>枚举
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>01背包变形
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>贪心
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>差分
+    </span></button>
+                        <button type="button" class="btn btn-default">
+                              <span>二叉树
+    </span></button>
+                        <button type="button" class="btn btn-primary" id="pick-one">
+                             <span><i class="ivu-icon ivu-icon-shuffle"></i>
+      Pick one
+    </span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="ivu-back-top" style="bottom: 30px; right: 30px;">
+    <div class="ivu-back-top-inner"><i class="ivu-icon ivu-icon-chevron-up"></i></div>
+</div>
+</div>
+<script type="text/javascript" src="../static/js/vendor.js"></script>
+<script type="text/javascript" src="../static/js/manifest.js"></script>
+<script type="text/javascript" src="../static/js/vendor_002.js"></script>
+<script type="text/javascript" src="../static/js/oj.js"></script>
+<div class="ivu-loading-bar" style="height: 2px; display: none;">
+    <div class="ivu-loading-bar-inner ivu-loading-bar-inner-color-primary" style="width: 0%; height: 2px;"></div>
+</div>
+<div data-v-a22a69c8="" data-transfer="true" class="v-transfer-dom">
+    <div class="ivu-modal-mask" style="display: none;"></div>
+    <div class="ivu-modal-wrap ivu-modal-hidden">
+        <div class="ivu-modal" style="width: 400px; display: none;">
+            <div class="ivu-modal-content"><a class="ivu-modal-close"><i class="ivu-icon ivu-icon-ios-close-empty"></i></a>
+                <div class="ivu-modal-header">
+                    <div data-v-a22a69c8="" class="modal-title">Welcome to USST_CEC_OJ</div>
+                </div>
+                <div class="ivu-modal-body"></div>
+                <div class="ivu-modal-footer">
+                    <div data-v-a22a69c8="" style="display: none;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

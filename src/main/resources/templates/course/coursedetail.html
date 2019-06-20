@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>视频</title>
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+<!--导航栏-->
+<nav class="navbar navbar-default navbar-inverse" role="navigation">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span
+                class="icon-bar"></span><span class="icon-bar"></span></button>
+        <a class="navbar-brand" href="#">USSTKY</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+            <li><a href="/mainpage">主页</a></li>
+            <li><a href="/questions">题库</a></li>
+            <li><a href="/courses">课程</a></li>
+            <li class="更多">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">更多<strong class="caret"></strong></a>
+                <ul class="dropdown-menu">
+                    <li><a href="/feedbacks">我要反馈</a></li>
+                    <li class="divider"></li>
+                    <li><a href="/aboutus">关于我们</a></li>
+                </ul>
+            </li>
+        </ul>
+        <form class="navbar-form navbar-left" role="search">
+            <div class="form-group">
+                <input class="form-control" type="text" placeholder="站内查询"/>
+            </div>
+            <button type="submit" class="btn btn-default">查询</button>
+        </form>
+        <ul class="nav navbar-nav" style="position: absolute;right: 0">
+            <!--             用户名，不需要链接地址-->
+            <li><a th:if="${session.loginRole=='Teacher'}" th:text="${session.teacher.getName()}"></a></li>
+            <li><a th:if="${session.loginRole=='Manager'}" th:text="${session.manager.getName()}"></a></li>
+            <li><a th:if="${session.loginRole=='Student'}" th:text="${session.student.getName()}">李华</a></li>
+            <!--             点击链接可注销-->
+            <li><a href="#">注销</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!--视频-->
+<div style="display: flex;flex-wrap: wrap;">
+    <table th:each="video:${videoLinks}">
+        <tr>
+            <td style="text-align: center"><h2 th:text="${video.getTitle()}"></h2></td>
+        </tr>
+        <tr>
+            <td>
+                <iframe allowfullscreen style="width: 200px;height: 200px"
+                        th:src="${video.getLink()}"></iframe>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="text-center">
+    <!--留言-->
+    <div class="center">
+        <table class=" table table-bordered table-hover table-striped" style="width: 800px">
+            <thead>
+            <tr style="text-align: center">
+                <th>留言人</th>
+                <th>留言内容</th>
+                <th>留言时间</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="message:${courseMessages}">
+                <td th:text="${message.getStudentID()}">小明</td>
+                <td th:text="${message.getMessageContent()}">很好的视频</td>
+                <td th:text="${message.getTime()}">2019-5-20</td>
+                <!--                点赞提交表单-->
+                <td>
+                    <img th:id="'good'+${message.getID()}" src="../images/good_gray.png" alt="点赞"
+                         onclick="clicklike(this)">
+                    <img>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <button class="btn btn-primary" data-toggle="modal" data-target="#myModal">发布留言</button>
+    </div>
+</div>
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">留言</h4>
+            </div>
+            <div class="center-block cen_model">
+                <!--发布留言表单-->
+                <form role="form" name="#" action="/courses/detail/addmessage" method="post">
+                    <div class="from-group">
+                        <input type="text" name="留言内容" class="form-control" placeholder="留言内容" required>
+                        <input type="text" name="课程ID" class="form-control" style="visibility: hidden" th:value="${courseInfo.getID()}" required>
+                        <input type="text" name="学生ID" class="form-control" style="visibility: hidden" th:value="${session.student.getID()}" required>
+
+                        <br/>
+                        <button type="submit" style="width: 300px" class="btn btn-primary">发布</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div><!-- /.modal-content -->
+</div>
+<script>
+    function clicklike(good) {
+        // alert("点赞成功");
+        var img = document.getElementById(good.id);
+        console.log(good.id)
+        console.log('img=' + img)
+        img.src = "../images/good_blue.png";
+    }
+</script>
+</body>
+
+</html>

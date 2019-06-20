@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>登录</title>
+    <link rel="stylesheet" href="css/style.css" type="text/css">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+<!--导航栏-->
+<nav class="navbar navbar-default navbar-inverse" role="navigation">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span
+                class="icon-bar"></span><span class="icon-bar"></span></button>
+        <a class="navbar-brand" href="/mainpage">USSTKY</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+            <li><a href="/mainpage">主页</a></li>
+            <li><a href="/questions">题库</a></li>
+            <li><a href="/courses">课程</a></li>
+            <li class="更多">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">更多<strong class="caret"></strong></a>
+                <ul class="dropdown-menu">
+                    <li><a href="/feedbacks">我要反馈</a></li>
+                    <li class="divider"></li>
+                    <li><a href="/aboutus">关于我们</a></li>
+                </ul>
+            </li>
+        </ul>
+        <form class="navbar-form navbar-left" role="search">
+            <div class="form-group">
+                <input class="form-control" type="text" placeholder="站内查询"/>
+            </div>
+            <button type="submit" class="btn btn-default">查询</button>
+        </form>
+    </div>
+</nav>
+
+<!--登录页面-->
+<div class="center-block cen">
+    <div class="center-block" style="text-align: center">
+        <h1 style="color: orange">登录/Login</h1>
+    </div>
+    <br>
+    <form role="form" name="loginform" action="/login" method="post" onsubmit="return login()">
+        <div class="center-block">
+            <input name="id" type="text" class="form-control" placeholder="请输入账号" required/>
+            <br>
+            <input name="password" type="password" class="form-control" placeholder="请输入密码" required/>
+            <div class="radio">
+                <label><input type="radio" name="loginRole" value="学生" checked>学生</label>
+                <label><input type="radio" name="loginRole" value="老师">老师</label>
+                <label><input type="radio" name="loginRole" value="管理员">管理员</label>
+            </div>
+            <br>
+            <button type="submit" style="width: 300px" class="btn btn-primary">登录</button>
+        </div>
+    </form>
+    <br>
+    <div>
+        <button id="学生注册" style="width: 150px ;float:left " class="btn btn-default" data-toggle="modal"
+                data-target="#student">学生注册
+        </button>
+        <button id="教师注册" style="width: 150px;float: right" class="btn btn-default" data-toggle="modal"
+                data-target="#teacher">教师注册
+        </button>
+    </div>
+</div>
+
+<!-- 模态框学生注册（Modal） -->
+<div class="modal fade" id="student" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="studentLabel">学生注册</h4>
+            </div>
+            <div class="modal-body">
+                <div class="center-block cen_model">
+                    <!--学生注册表单-->
+                    <form role="form" name="studentRegisterForm" action="/register/student" method="post"
+                          onsubmit="return studentRegister()">
+                        <div class="from-group">
+                            <input type="text" name="学号" class="form-control" placeholder="学号(登录账号)" required>
+                            <br>
+                            <input type="text" name="姓名" class="form-control" placeholder="姓名" required>
+                            <br>
+                            <input type="password" name="密码" class="form-control" placeholder="密码" required>
+                            <br>
+                            <select name="student_grade" class="form-control" required>
+                                <option selected>请选择你的年级</option>
+                                <option>2018级</option>
+                                <option>2017级</option>
+                                <option>2016级</option>
+                                <option>2015级</option>
+                                <option>2014级</option>
+                                <option>2013级</option>
+                            </select>
+                            <br>
+                            <input type="text" name="目标院校" class="form-control" placeholder="您的目标院校(可不填写)">
+                        </div>
+                        <br>
+                        <button type="submit" style="width: 300px; " class="btn btn-primary">注册</button>
+                    </form>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- 模态框教师注册（Modal） -->
+<div class="modal fade" id="teacher" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="teacherLabel">教师注册</h4>
+            </div>
+            <div class="modal-body">
+                <div class="center-block cen_model">
+                    <!--教师注册表单-->
+                    <form role="form" name="teacherRegisterForm" action="/register/teacher" method="post"
+                          onsubmit="return teacherRegister()">
+                        <div class="from-group">
+                            <input type="text" name="工号" class="form-control" placeholder="工号(登录账号)" required>
+                            <br>
+                            <input type="text" name="姓名" class="form-control" placeholder="姓名" required>
+                            <br>
+                            <input type="password" name="密码" class="form-control" placeholder="密码" required>
+                            <br>
+                            <input type="text" name="电话" class="form-control" placeholder="联系电话" required>
+                            <br>
+                            <select name="teacher_subject" class="form-control" required>
+                                <option selected>请选择你讲授的科目</option>
+                                <option>高等数学</option>
+                                <option>英语</option>
+                                <option>数据结构</option>
+                                <option>操作系统</option>
+                                <option>计算机组成</option>
+                                <option>计算机网络</option>
+                                <option>政治</option>
+                            </select>
+
+                            <br/>
+                            <button type="submit" style="width: 300px" class="btn btn-primary">注册</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+</body>
+<script language="JavaScript">
+    //登陆时表单的判断
+    function login() {
+        var Role = document.getElementsByName("loginRole");
+        for (var i = 0; i < Role.length; i++) {
+            if (Role[i].checked == true) {
+                return true;
+            }
+        }
+        alert("请选择你的身份!");
+        return false;
+    }
+
+    //此处编写学生注册时要进行的判断
+    function studentRegister() {
+        var grade = document.studentRegisterForm.student_grade.value;
+        if (grade == "请选择你的年级") {
+            alert("请选择你的年级！");
+            return false;
+        }
+        return true;
+    }
+
+    //此处编写老师注册时要进行的判断
+    function teacherRegister() {
+        var subject = document.teacherRegisterForm.teacher_subject.value;
+        if (subject == "请选择你讲授的科目") {
+            alert("请选择你讲授的科目！");
+            return false;
+        }
+        return true;
+    }
+</script>
+</html>
