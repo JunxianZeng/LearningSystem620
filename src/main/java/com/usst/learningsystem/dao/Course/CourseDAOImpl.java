@@ -69,7 +69,7 @@ public class CourseDAOImpl implements ICourseDAO
     public int addCourseMessage(int courseID, String studentID, String content)
     {
         Date time = new Date(new java.util.Date().getTime());
-        return jdbcTemplate.update("insert into course_message(id, courseID, studentID, messagecontent, time) values(?, ?, ?, ?, ?)", null, courseID, studentID, content, time);
+        return jdbcTemplate.update("insert into course_message(id, courseID, studentID, messagecontent, time, positivenumber, negativenumber, toped) values(?, ?, ?, ?, ?,0,0,0)", null, courseID, studentID, content, time);
     }
 
     @Override
@@ -107,6 +107,8 @@ public class CourseDAOImpl implements ICourseDAO
             return empty;
         } catch (Exception e)
         {
+            e.printStackTrace();
+            System.out.println("出异常了");
             return empty;
         }
     }
