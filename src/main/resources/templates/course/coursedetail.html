@@ -65,29 +65,16 @@
                     </thead>
                     <tr th:each="video:${videoLinks}">
                         <td style='vertical-align: middle;text-align: center;'>
-                            <p class="lead">高等数学一</p>
+                            <p class="lead" th:text="${video.getTitle()}">高等数学一</p>
                         </td>
-                        <td>
-                            <!-- <iframe allowfullscreen style="width: 200px;height: 200px"
-                        th:src="${video.getLink()}"></iframe> -->
-                            <iframe src="http://player.youku.com/embed/XMzYyNzEyMzIyNA==" width="" scrolling="no"
+                        <td th:ap>
+                            <iframe th:src="${video.getLink()}" width="" scrolling="no"
                                     border="0" frameborder="no" framespacing="0" allowfullscreen="true"
                                     class="center-block">
                             </iframe>
                         </td>
                     </tr>
-                    <tr th:each="video:${videoLinks}">
-                        <td style='vertical-align: middle;text-align: center;'>
-                            <p class="lead">高等数学一</p>
-                        </td>
-                        <td>
-                            <!-- <iframe allowfullscreen style="width: 200px;height: 200px"
-                            th:src="${video.getLink()}"></iframe> -->
-                            <iframe src="//player.bilibili.com/player.html?aid=18965449&cid=30932525&page=1"
-                                    scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true">
-                            </iframe>
-                        </td>
-                    </tr>
+
                 </table>
             </div>
         </div>
