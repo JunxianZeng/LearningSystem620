@@ -1,12 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-<html xmlns:th="http://www.thymeleaf.org">
+<html>
 <head>
     <meta charset="UTF-8">
     <title>公告详情</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
 </head>
 <body>
-<span>内容：</span>
-<text th:text="${notification.getContent()}"></text>
+<div>
+
+</div>
+<script>
+    $(document).ready(function () {
+        $("div").load("1.html");
+    });
+</script>
 </body>
 </html>
