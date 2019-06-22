@@ -37,7 +37,7 @@
         </ul>
         <form class="navbar-form navbar-left" role="search">
             <div class="form-group">
-                <input class="form-control" type="text" placeholder="站内查询" />
+                <input class="form-control" type="text" placeholder="站内查询"/>
             </div>
             <button type="submit" class="btn btn-default">查询</button>
         </form>
@@ -68,10 +68,10 @@
                             <p class="lead" th:text="${video.getTitle()}">高等数学一</p>
                         </td>
                         <td th:ap>
-                            <iframe th:src="${video.getLink()}" width="" scrolling="no"
+                            <video th:src="${video.getLink()}" width="" scrolling="no"
                                     border="0" frameborder="no" framespacing="0" allowfullscreen="true"
-                                    class="center-block">
-                            </iframe>
+                                    class="center-block" preload="false">
+                            </video>
                         </td>
                     </tr>
 
@@ -111,10 +111,13 @@
                                placeholder="留言内容" required>
                         <input type="text" id="courseid" name="课程ID" class="form-control" style="display: none"
                                th:value="${courseInfo.getID()}" required>
-                        <input type="text" id="studentid" name="学生ID" class="form-control" style="display: none"
-                               th:value="${session.student.getID()}" required>
-
-                        <br />
+                        <div th:switch="${session.student!=null}">
+                            <input th:case="true" type="text" name="学生ID" class="form-control" style="display: none"
+                                   th:value="${session.student.getID()}" required>
+                            <input th:case="false" type="text" name="学生ID" class="form-control"
+                                   th:value="nostudentid" required>
+                        </div>
+                        <br/>
                         <div class="row">
                             <div class="col-md-4"></div>
                             <div class="col-md-4 ">
@@ -122,14 +125,14 @@
                                 </button>
                             </div>
                             <div class="col-md-4 ">
-                                <button type="button" id="cancel" class="btn btn-default center-block">取消 </button>
+                                <button type="button" id="cancel" class="btn btn-default center-block">取消</button>
                             </div>
                         </div>
                     </div>
-
                 </form>
                 <button class="btn btn-primary center-block" data-toggle="modal" data-target="#myModal"
-                        id="put">我要留言</button>
+                        id="put">我要留言
+                </button>
             </div>
         </div>
     </div>
@@ -148,12 +151,16 @@
     $(document).ready(function () {
         $("#message").hide();
         $("#put").click(function () {
-            $(this).hide();
+            if ($("input[name='学生ID']").val()=="nostudentid"){
+                alert("未登录！");
+                return;
+            }
+                $(this).hide();
             $("#message").show(1000);
         })
         $("#submit").click(function () {
             if ($("#content").val() != "") {
-                $("#message").hide(1000,'linear',function(){
+                $("#message").hide(1000, 'linear', function () {
                     $("#content").val("");
                 });
                 $("#put").show();
