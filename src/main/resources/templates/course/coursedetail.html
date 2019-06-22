@@ -112,7 +112,7 @@
                         <input type="text" id="courseid" name="课程ID" class="form-control" style="display: none"
                                th:value="${courseInfo.getID()}" required>
                         <div th:switch="${session.student!=null}">
-                            <input th:case="true" type="text" name="学生ID" class="form-control" style="display: none"
+                            <input th:case="true" type="text" id="studentid" name="学生ID" class="form-control" style="display: none"
                                    th:value="${session.student.getID()}" required>
                             <input th:case="false" type="text" name="学生ID" class="form-control"
                                    th:value="nostudentid" required>
@@ -153,6 +153,7 @@
         $("#put").click(function () {
             if ($("input[name='学生ID']").val()=="nostudentid"){
                 alert("未登录！");
+                window.location.href="/login.html";
                 return;
             }
                 $(this).hide();
