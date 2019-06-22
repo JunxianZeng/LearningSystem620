@@ -52,51 +52,27 @@
 <!--课程列表页面-->
 <div class="container">
     <div class="row clearfix" th:each="course:${courses}">
-        <div class="col-md-12 column">
-            <table class="table table-bordered table-hover table-striped" >
+        <div class="col-md-8 column">
+            <table class="table table-bordered table-hover table-striped">
                 <thead>
                 <tr></tr>
                 </thead>
                 <tbody>
-                <tr >
-                    <td rowspan="2" style="width: 150px"><img th:src="@{'/images/'+${course.getSubject()}+'.jpg'}"  style="width: 150px;height: 150px"></td>
+                <tr>
+                    <td rowspan="2" style="width: 120px"><img  th:src="@{'/images/'+${course.getSubject()}+'.jpg'}"
+                                                              style="width: 120px;height: 120px"></td>
                     <td style="width: 80px">课程名称</td>
-                    <td><a th:href="@{'/courses/detail?id='+${course.getID()}}" th:text="${course.getName()}" ></a></td>
+                    <td><a th:href="@{'/courses/detail?id='+${course.getID()}}" th:text="${course.getName()}"></a></td>
                 </tr>
-<!--                <tr>-->
-<!--                    <td>教师</td>-->
-<!--                    <td>李华</td>-->
-<!--                </tr>-->
                 <tr>
                     <td>课程介绍</td>
                     <td th:text="${course.getDescription()}"></td>
                 </tr>
-<!--                <tr>-->
-<!--                    <td>发布时间</td>-->
-<!--                    <td>2019-5-29</td>-->
-<!--                </tr>-->
-<!--                <tr>-->
-<!--                <td style="border: none;padding: 0px; background: white"></td>-->
-<!--                </tr>-->
-<!--                <tr>-->
-<!--                <td rowspan="4"><img src="/images/线性代数.jpg" style="width: 150px;height: 150px"></td>-->
-<!--                <td style="width: 80px">课程名称</td>-->
-<!--                <td><a href="/courses/detail?id=1002">线性代数</a></td>-->
-<!--                </tr>-->
-<!--                <tr>-->
-<!--                <td>教师</td>-->
-<!--                <td>李华</td>-->
-<!--                </tr>-->
-<!--                <tr>-->
-<!--                <td>课程介绍</td>-->
-<!--                <td>本课程主要讨论有限维线性空间的线性理论与方法，具有较强的逻辑性、抽象性与广泛的实用性，尤其在计算机日益普及的今天，解大型线...</td>-->
-<!--                </tr>-->
-<!--                <tr>-->
-<!--                <td>发布时间</td>-->
-<!--                <td>2019-5-29</td>-->
-<!--                </tr>-->
                 </tbody>
             </table>
+
+        </div>
+        <div class="col-md-4 column">
 
         </div>
     </div>

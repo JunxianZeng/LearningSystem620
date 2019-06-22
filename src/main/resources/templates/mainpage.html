@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
+
 <head>
+    <style>
+    </style>
     <meta charset="utf-8">
     <title>学生主页</title>
     <link rel="stylesheet" href="mainpage.css">
@@ -8,16 +11,16 @@
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
-<body>
 
+<body>
 <nav class="navbar navbar-default navbar-inverse" role="navigation" style="width: 100%">
     <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <button type="button" class="navbar-toggle" data-toggle="collapse"
+                data-target="#bs-example-navbar-collapse-1">
             <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span
                 class="icon-bar"></span><span class="icon-bar"></span></button>
         <a class="navbar-brand" href="#">USSTKY</a>
     </div>
-
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
             <li><a href="/mainpage">主页</a></li>
@@ -48,24 +51,23 @@
         </ul>
     </div>
 </nav>
-
 <div class="container">
     <div class="row clearfix">
         <div class="col-md-8 column">
-            <p class="lead text-center">
+            <p class="lead text-left" style="border-left: 6px solid rgb(34,34,34);">
                 <em>公告</em>
             </p>
             <ul class="list-group">
-                <li class="list-group-item" th:each="note : ${notifications}">
-                    <a style="font-size: 20px" th:href="@{'/mainpage/notification?id='+${note.getID()}}"
-                       th:text="${note.getTitle()}">第一条公告</a>
-                </li>
+<!--                <li class="list-group-item" th:each="note : ${notifications}">-->
+                    <a th:each="note : ${notifications}" class="list-group-item" style="font-size: 20px "
+                       th:href="@{'/mainpage/notification?id='+${note.getID()}}" th:text="${note.getTitle()}">第一条公告</a>
+<!--                </li>-->
             </ul>
         </div>
-        <div class="col-md-4 column">
+        <div class="col-md-4 column" style="height: 100%">
             <p class="lead text-center">
                 <em>倒计时</em>
-                <text style="color: #cb4b16" th:text="${days}">jjj</text>
+                <text style="color: #cb4b16 " th:text="${days}">108</text>
                 <em>天</em>
             </p>
             <div id="myCarousel" class="carousel slide">
@@ -97,8 +99,81 @@
                     <span class="sr-only">Next</span>
                 </a>
             </div>
+            <br>
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="lead text-left" style="border-left: 6px solid rgb(34,34,34);">
+                        <em>考研报考</em>
+                    </p>
+                    <div class="m_area">
+                        <div class="ky_bk2">
+                            <h4 class="ft18">选择专业</h4>
+                            <a target="_blank" href="http://www.chinakaoyan.com/info/list/ClassID/91.shtml"
+                               class="ft14">专业介绍</a>
+                            <a target="_blank" href="http://www.chinakaoyan.com/info/list/ClassID/13.shtml"
+                               class="ft14">怎么选择专业</a>
+                            <a target="_blank" href="http://www.chinakaoyan.com/topic/xszyss.html"
+                               class="ft14">学硕vs专硕</a>
+                        </div>
+                        <div class="ky_bk3">
+                            <h4 class="ft18">选择学校</h4>
+                            <a target="_blank" href="http://www.chinakaoyan.com/graduate/zhx.shtml" class="ft14">34所</a>
+                            <a target="_blank" href="http://www.chinakaoyan.com/graduate/211.shtml" class="ft14">211</a>
+                            <a target="_blank" href="http://www.chinakaoyan.com/graduate/985.shtml" class="ft14">985</a>
+                            <a target="_blank" href="http://www.chinakaoyan.com/baolubi/" class="ft14">考研报录比</a>
+                        </div>
+                        <div class="ky_bk4">
+                            <h4 class="ft18">考研报名</h4>
+                            <a target="_blank" href="http://www.chinakaoyan.com/topic/wangbao.html"
+                               class="ft14">考研报名入口</a>
+                            <a target="_blank" href="http://www.chinakaoyan.com/info/article/id/248369.shtml"
+                               class="ft14">报名材料</a>
+                            <a target="_blank" href="http://www.chinakaoyan.com/info/article/id/248869.shtml"
+                               class="ft14">考研报名时间</a>
+                            <a target="_blank" href="http://www.chinakaoyan.com/info/article/id/250933.shtml"
+                               class="ft14">网报流程</a>
+                        </div>
+                        <div class="ky_bk5">
+                            <h4 class="ft18">现场确认</h4>
+                            <a target="_blank" href="http://www.chinakaoyan.com/info/article/id/248373.shtml"
+                               class="ft14">注意事项</a>
+                            <a target="_blank" href="http://www.chinakaoyan.com/info/article/id/254221.shtml"
+                               class="ft14">确认时间地点</a>
+                            <a target="_blank" href="http://www.chinakaoyan.com/info/article/id/258485.shtml"
+                               class="ft14">考研现场确认需要带什么</a>
+                        </div>
+                        <div class="ky_bk6">
+                            <h4 class="ft18">考研初试</h4>
+                            <a target="_blank" href="http://www.chinakaoyan.com/chushi/" class="ft14">考研真题解析</a>
+                            <a target="_blank" href="http://www.chinakaoyan.com/info/article/id/262409.shtml"
+                               class="ft14">打印准考证</a>
+                            <a target="_blank" href="http://www.chinakaoyan.com/info/article/id/258515.shtml"
+                               class="ft14">考研时间</a>
+                        </div>
+                        <div class="ky_bk1">
+                            <h4 class="ft18">调剂复试</h4>
+                            <a target="_blank" href="http://www.chinakaoyan.com/chengji/" class="ft14">成绩查询</a>
+                            <a target="_blank" href="http://www.chinakaoyan.com/tiaoji/" class="ft14">考研调剂</a>
+                            <a target="_blank" href="http://www.chinakaoyan.com/guojiaxian/" class="ft14">考研国家线</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <p class="lead text-left" style="border-left: 6px solid rgb(34,34,34);">
+                        <em>友情链接</em>
+                    </p>
+                    <div>
+                        <div><a href="http://yjs.usst.edu.cn/">上海理工大学研究生信息网</a></div>
+                        <div><a href="https://yz.chsi.com.cn/">中国研究生招生信息网</a></div>
+                        <div><a href="http://www.chinakaoyan.com/">中国考研网</a></div>
+                        <div><a href="http://kaoyan.eol.cn/">中国教育在线</a></div>
+                        <div><a href="http://www.kaoyan365.cn/">中公考研信息网</a></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 </body>
+
 </html>
