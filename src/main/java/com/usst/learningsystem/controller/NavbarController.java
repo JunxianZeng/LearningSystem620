@@ -56,7 +56,7 @@ public class NavbarController
         int ID = Integer.parseInt(id);
         Notification notification = service.findNotification(ID);
         model.addAttribute("notification", notification);
-        return "notification/"+id;
+        return "notification/content";
     }
 
     //题库
