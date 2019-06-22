@@ -31,7 +31,6 @@ public class CourseController
         model.addAttribute("courseNotices", courseNotices);
         model.addAttribute("videoLinks", videoLinks);
         model.addAttribute("courseMessages", courseMessages);
-        System.out.println(courseMessages.get(0).getStudentID());
         return "course/coursedetail";
     }
 
