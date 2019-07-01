@@ -83,10 +83,13 @@
                                             <p class="lead" th:text="${video.getTitle()}">高等数学一</p>
                                         </td>
                                         <td th:ap>
-                                            <iframe th:src="${video.getLink()}" width="" scrolling="no"
-                                                    border="0" frameborder="no" framespacing="0" allowfullscreen="true"
-                                                    class="center-block" >
-                                            </iframe>
+<!--                                            <iframe th:src="${video.getLink()}" width="" scrolling="no"-->
+<!--                                                    border="0" frameborder="no" framespacing="0" allowfullscreen="true"-->
+<!--                                                    class="center-block" >-->
+<!--                                            </iframe>-->
+                                            <video th:src="${video.getLink()}"controls="controls">
+                                                your browser does not support the video tag
+                                                </video>
                                         </td>
                                     </tr>
 
